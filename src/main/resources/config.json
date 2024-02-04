@@ -1,0 +1,16 @@
+{
+  "port": 80,
+  "documentRoot": "/",
+  "servers" : [
+    {
+      "port" : 3306,
+      "documentRoot" : "/mysql",
+      "execute" : [
+        {
+          "extension" : ".php"
+
+        }
+      ]
+    }
+  ]
+}

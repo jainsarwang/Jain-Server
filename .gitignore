@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+# intellij File
+.idea
+
 # Log file
 *.log
 
