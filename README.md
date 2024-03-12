@@ -10,3 +10,7 @@ In this project, I had use Java to build a Web Server.
   - [x] Processing GET request
   - [x] Sending :file_folder: File with Mime Type info
   - [x] Sending Transfer-Encoding : Chunked
+
+- **`13 March, 2024`**
+  - [x] Can send Binary Files
+  - [x] Sharing Server Information in Header

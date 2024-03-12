@@ -1,7 +1,8 @@
 package com.Server.utils;
 
 public enum MIMEType {
-    TEXT_HTML("text/html", "html|htm"),
+    TEXT_HTML("text/html", "html|htm|ico"),
+    TEXT_PHP("text/html", "php"),
     TEXT_CSS("text/css", "css"),
     TEXT_JS("text/javascript", "js"),
     TEXT_TXT("text/plain", "txt"),

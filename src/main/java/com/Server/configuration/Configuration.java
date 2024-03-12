@@ -6,18 +6,7 @@ public class Configuration {
     private int port;
     private String documentRoot;
 
-//    private Configuration() {
-////        port = 80;
-//    }
-//
-//    public Configuration() {}
-//    public Configuration (Object o)  {
-//        JSONObject json = (JSONObject) o;
-//
-//        this.port = (int) json.get("port");
-//        this.documentRoot = (String) json.get("documentRoot");
-//    }
-
+    private Object mainServerConf;
     public int getPort() {
         return port;
     }
@@ -41,5 +30,13 @@ public class Configuration {
 
     public void setServers(Object[] servers) {
         this.servers = servers;
+    }
+
+    public Object getMainServerConf() {
+        return this.mainServerConf;
+    }
+
+    public void setMainServerConf(Object mainServerConf) {
+        this.mainServerConf = mainServerConf;
     }
 }

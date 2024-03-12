@@ -12,19 +12,18 @@ class Server {
         ConfigurationManager.getInstance().loadConfigurationFile("src/main/resources/config.json");
         Configuration conf = ConfigurationManager.getInstance().getCurrentConfiguration();
 
-
+        JsonNode mainNode = JSON.toJSON(conf.getMainServerConf());
         if(conf.getPort() != 0 && conf.getDocumentRoot() != null) {
-            new ServerListener(conf.getPort(), conf.getDocumentRoot()).start(); // running Default server
+            new ServerListener(conf.getPort(), conf.getDocumentRoot(), mainNode).start(); // running Default server
         }
 
         // running multiple other servers
         for (Object server: conf.getServers()) {
-            System.out.println(server.getClass());
             JsonNode node = JSON.toJSON(server);
             Configuration newConfiguration = JSON.fromJson(node, Configuration.class);
 
             if(conf.getPort() != 0 && conf.getDocumentRoot() != null) {
-                new ServerListener(newConfiguration.getPort(), conf.getDocumentRoot(), server).start();
+                new ServerListener(newConfiguration.getPort(), conf.getDocumentRoot(), node).start();
             }
         }
     }

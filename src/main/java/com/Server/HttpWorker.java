@@ -1,7 +1,9 @@
 package com.Server;
 
 import com.Server.Http.*;
+import com.Server.utils.FileResponse;
 import com.Server.utils.URLParser;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -15,24 +17,26 @@ import java.util.Map;
 
 public class HttpWorker extends Thread {
     private Socket socket;
-    Map<String, String> reqs = new HashMap<>();
-
+    private String documentRoot;
 
     int clientPort;
     private InetAddress address;
     private SocketAddress socketAddress;
     private InputStream reader;
     private OutputStream writer;
+    private ObjectNode serverInfo;
 
     /**
      * Socket data starts from here
      */
-
-
     HttpWorker(Socket soc) throws IOException {
         socket = soc;
         reader = socket.getInputStream();
         writer = socket.getOutputStream();
+    }
+
+    public void serverInfo(ObjectNode serverInfo) {
+        this.serverInfo = serverInfo;
     }
 
     @Override
@@ -42,31 +46,19 @@ public class HttpWorker extends Thread {
             HttpRequest request = httpParser.parseHttpRequest(reader);
 
             if(request.getMethod() == HttpMethod.GET) {
-                URLParser requestURI = new URLParser( request.getRequestTarget());
+                URLParser requestURI = new URLParser(request.getRequestTarget());
 
                 HttpResponse response = new HttpResponse();
                 response.setHttpVersion(request.getBestCompatibleHttpVersion());
-                File file = new File(requestURI.getPath());
 
-                if (file.exists()) {
-                    if (file.isDirectory()) {
-                        response.setStatusCode(HttpStatusCode.CLIENT_ERROR_403_FOR_BIDDEN);
+                FileOperations file = new FileOperations(serverInfo.get("documentRoot").asText(), requestURI.getPath());
+                FileResponse fileData = file.getMostSuitableFile();
 
-                        file = new File("src/main/resources/error/403.html");
-                    } else {
-                        response.setStatusCode(HttpStatusCode.CLIENT_ERROR_200_OK);
-                    }
-                } else {
-                    // file not found 404 error
-                    response.setStatusCode(HttpStatusCode.CLIENT_ERROR_404_NOT_FOUND);
-                    file = new File("src/main/resources/error/404.html");
-                }
-
-                response.setResponseBody(file);
+                response.setStatusCode(fileData.statusCode);
+                response.setResponseBody(fileData.file);
 
                 response.sendResponse(writer);
             }
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -9,6 +9,7 @@ package com.Server.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 
@@ -98,5 +99,14 @@ public class JSON {
             objectWriter = objectWriter.with(SerializationFeature.INDENT_OUTPUT);
         }
         return objectWriter.writeValueAsString(o);
+    }
+
+    public void deepCopy()
+    {
+        System.out.println(this);
+//        ObjectNode ret = new ObjectNode();
+//        for (Map.Entry<String, JsonNode> entry: _children.entrySet())
+//            ret._children.put(entry.getKey(), entry.getValue().deepCopy());
+//        return ret;
     }
 }
